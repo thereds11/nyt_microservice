@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from app.nyt_client import NYTClient
-from app.schema import TopStoryArticle
+from app.schema import TopStoryArticle, ArticleSearchResult
 from app.config import settings
 from typing import List, Dict
 
@@ -28,6 +28,20 @@ async def get_top_stories(client: NYTClient = Depends(get_nyt_client)):
         stories[section] = formatted
     return stories
 
-@router.get("/articlesearch")
-async def search_articles():
-    return {"message": "Article search endpoint"}
+@router.get("/articlesearch", response_model=List[ArticleSearchResult])
+async def search_articles(
+    q: str = Query(..., description="Search keyword"),
+    begin_date: str = Query(None, description="YYYYMMDD"),
+    end_date: str = Query(None, description="YYYYMMDD"),
+    client: NYTClient = Depends(get_nyt_client)
+):
+    raw_articles = await client.article_search(q, begin_date, end_date)
+    return [
+        ArticleSearchResult(
+            headline=article["headline"]["main"],
+            snippet=article["snippet"],
+            web_url=article["web_url"],
+            pub_date=article["pub_date"]
+        )
+        for article in raw_articles
+    ]
