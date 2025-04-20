@@ -36,6 +36,7 @@ async def search_articles(
     client: NYTClient = Depends(get_nyt_client)
 ):
     raw_articles = await client.article_search(q, begin_date, end_date)
+    print(raw_articles)
     return [
         ArticleSearchResult(
             headline=article["headline"]["main"],
