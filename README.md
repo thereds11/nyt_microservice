@@ -77,9 +77,7 @@ Search NYTimes articles by keyword and optional date range.
 
 Query Parameters:
     - `q`: search term (required)
-
     - `begin_date`: format `YYYYMMDD` (optional)
-
     - `end_date`: format `YYYYMMDD` (optional)
 
 Response:
