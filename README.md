@@ -29,7 +29,7 @@ cd nyt_microservice
 ```bash
 python -m venv venv
 source venv/bin/activate # Windows: venv\Scripts\activate
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 ### 3. Create `.env` file
